@@ -9,6 +9,8 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface DishMapper {
 
@@ -28,4 +30,20 @@ public interface DishMapper {
 
 
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+
+
+    @Select("select status from dish where id = #{id}")
+    Dish getStatusById(Long id);
+
+
+    void deleteDishBatchByIds(List<Long> ids);
+
+
+    @Select("select * from dish where id = #{id}")
+    Dish selectDishById(Long id);
+
+
+    @AutoFill(OperationType.UPDATE)
+    void update(Dish dish);
 }
