@@ -8,15 +8,18 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,9 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
+
     /**
      * 新增菜品
      * @param dishDTO
@@ -63,7 +69,6 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 菜品分页查询
-     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -74,6 +79,11 @@ public class DishServiceImpl implements DishService {
         return new PageResult(dishVOS.getTotal(),dishVOS.getResult());
     }
 
+
+    /**
+     * 根据id删除菜品
+     * @param ids
+     */
     @Transactional
     public void deleteWithFlavor(List<Long> ids) {
         //删除菜品：有套餐关联的不删
@@ -111,6 +121,35 @@ public class DishServiceImpl implements DishService {
         BeanUtils.copyProperties(dish,dishVO);
         dishVO.setFlavors(dishFlavor);
         return dishVO;
+    }
+
+
+    /**
+     * 更新菜品状态
+     * @param status
+     * @param id
+     */
+    @Override
+    public void updateStatusById(int status, Long id) {
+        Dish dish = Dish.builder().id(id).status(status).build();
+        dishMapper.update(dish);
+        //停售 对应套餐也停售
+        if (status == StatusConstant.DISABLE) {
+            // 如果是停售操作，还需要将包含当前菜品的套餐也停售
+            List<Long> dishIds = new ArrayList<>();
+            dishIds.add(id);
+            // select setmeal_id from setmeal_dish where dish_id in (?,?,?)
+            List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+            if (setmealIds != null && setmealIds.size() > 0) {
+                for (Long setmealId : setmealIds) {
+                    Setmeal setmeal = Setmeal.builder()
+                            .id(setmealId)
+                            .status(StatusConstant.DISABLE)
+                            .build();
+                    setmealMapper.update(setmeal);
+                }
+            }
+        }
     }
 
 
