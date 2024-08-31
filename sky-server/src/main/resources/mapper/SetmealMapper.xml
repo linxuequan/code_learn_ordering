@@ -32,4 +32,20 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select setmeal.* , category.name as categoryName from setmeal left join category on setmeal.category_id = category.id
+        <where>
+            <if test="name != null">
+               and setmeal.name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and setmeal.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and setmeal.status = #{status}
+            </if>
+        </where>
+        order by setmeal.create_time desc
+    </select>
 </mapper>

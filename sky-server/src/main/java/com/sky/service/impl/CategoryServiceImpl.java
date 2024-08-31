@@ -8,6 +8,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.entity.Dish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
@@ -129,4 +130,6 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> list(Integer type) {
         return categoryMapper.list(type);
     }
+
+
 }

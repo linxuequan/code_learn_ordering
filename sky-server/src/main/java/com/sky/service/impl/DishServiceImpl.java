@@ -139,8 +139,11 @@ public class DishServiceImpl implements DishService {
             List<Long> dishIds = new ArrayList<>();
             dishIds.add(id);
             // select setmeal_id from setmeal_dish where dish_id in (?,?,?)
+            // 根据菜品ID查询套餐ID
+//            List<Long> setmealIds = setmealDishMapper.getMealIdsByDishId(id);
             List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
             if (setmealIds != null && setmealIds.size() > 0) {
+                //对每个套餐单独更新
                 for (Long setmealId : setmealIds) {
                     Setmeal setmeal = Setmeal.builder()
                             .id(setmealId)
@@ -150,6 +153,18 @@ public class DishServiceImpl implements DishService {
                 }
             }
         }
+    }
+
+    /**
+     * 根据菜品分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> selectDishByCategoryId(Long categoryId) {
+        List<Dish> dish = dishMapper.list(categoryId);
+        return dish;
     }
 
 

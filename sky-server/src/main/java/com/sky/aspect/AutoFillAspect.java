@@ -6,7 +6,6 @@ import com.sky.context.BaseContext;
 import com.sky.enumeration.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -32,7 +31,7 @@ public class AutoFillAspect {
     public void autoFill(JoinPoint joinPoint){
         log.info("公共自动填充...");
 
-        //获取方法数据库操作类型
+        //获取方法数据库操作类型 JoinPoint切点
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();//方法签名对象
         AutoFill autoFill = signature.getMethod().getAnnotation(AutoFill.class);//方法注解对象
         OperationType operationType = autoFill.value();//数据库操作类型
