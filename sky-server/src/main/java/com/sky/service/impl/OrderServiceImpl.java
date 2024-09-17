@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         if (shoppingCartList == null || shoppingCartList.size() == 0) {
             throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
         }
- 
+
         //构造订单数据
         Orders order = new Orders();
         BeanUtils.copyProperties(ordersSubmitDTO,order);
