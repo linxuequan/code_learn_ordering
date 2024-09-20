@@ -34,6 +34,7 @@ public class AliOssUtil {
         try {
             // 创建PutObject请求。
             ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(bytes));
+
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
@@ -52,7 +53,7 @@ public class AliOssUtil {
             }
         }
 
-        //文件访问路径规则 https://BucketName.Endpoint/ObjectName
+        //文件访问路径规则 https://BucketName.Endpoint/ObjectName   StringBuilder拼接
         StringBuilder stringBuilder = new StringBuilder("https://");
         stringBuilder
                 .append(bucketName)

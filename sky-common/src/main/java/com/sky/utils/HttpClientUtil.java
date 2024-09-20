@@ -34,6 +34,8 @@ public class HttpClientUtil {
      * @return
      */
     public static String doGet(String url,Map<String,String> paramMap){
+        //示例 map承载一些键值对字段
+//   i.e: HttpClientUtil.doGet("https://api.map.baidu.com/directionlite/v1/driving", map);
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
 

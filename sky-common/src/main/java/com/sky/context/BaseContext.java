@@ -1,5 +1,5 @@
 package com.sky.context;
-
+//import java.lang.*;
 public class BaseContext {
 
     public static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
